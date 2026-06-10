@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <style>
+      :root { color-scheme: dark; font-family: Arial, Helvetica, sans-serif; background: #000; color: #e4e4e7; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: linear-gradient(180deg, #09090b 0%, #000 100%); }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 32px 18px 60px; }
+      .panel { border: 1px solid #27272a; background: #09090b; border-radius: 14px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+      .label { text-transform: uppercase; letter-spacing: .25em; font-size: 11px; color: #a1a1aa; }
+      h1 { margin: 8px 0 0; font-size: 22px; color: #ecfccb; }
+      p { color: #d4d4d8; line-height: 1.45; }
+      .grid { display: grid; gap: 12px; }
+      .field { display: grid; gap: 6px; }
+      label span { font-size: 12px; color: #a1a1aa; text-transform: uppercase; letter-spacing: .18em; }
+      input { width: 100%; border: 1px solid #27272a; border-radius: 10px; background: #000; color: #fff; padding: 10px 12px; font: inherit; }
+      button { border: 1px solid rgba(52,211,153,.6); background: rgba(52,211,153,.08); color: #a7f3d0; border-radius: 10px; padding: 10px 14px; font: inherit; cursor: pointer; }
+      button:hover { background: rgba(52,211,153,.18); }
+      .error { color: #fca5a5; font-size: 13px; }
+      .badge { color: #6ee7b7; font-weight: 700; }
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="panel">
+        <p class="label">admin endpoint</p>
+        <h1>Administrator Access</h1>
+
+        <section id="loginPanel" class="panel" style="margin-top: 14px;">
+          <form id="adminForm" class="grid">
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+              <label class="field">
+                <span>Username</span>
+                <input id="username" type="text" autocomplete="username" placeholder="Enter username" />
+              </label>
+              <label class="field">
+                <span>Password</span>
+                <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" />
+              </label>
+            </div>
+            <p id="error" class="error" aria-live="polite"></p>
+            <button type="submit">Login</button>
+          </form>
+        </section>
+
+        <section id="protectedContent" class="hidden">
+          <p style="font-size: 28px; color: #6ee7b7; font-weight: 800; margin: 18px 0 10px;">LOLLLLLLLL🫵</p>
+          <p style="margin-top: 8px; color: #d4d4d8;">This page is protected. Only successful authentication reveals it.</p>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const form = document.getElementById('adminForm');
+      const error = document.getElementById('error');
+      const loginPanel = document.getElementById('loginPanel');
+      const protectedContent = document.getElementById('protectedContent');
+
+      const correctUser = 'admin';
+      const correctPass = 'admin';
+
+      function isAuthenticated(username, password) {
+        return username === correctUser && password === correctPass;
+      }
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        if (!isAuthenticated(username, password)) {
+          error.textContent = 'Invalid credentials.';
+          protectedContent.classList.add('hidden');
+          loginPanel.classList.remove('hidden');
+          return;
+        }
+
+        error.textContent = '';
+        loginPanel.classList.add('hidden');
+        protectedContent.classList.remove('hidden');
+        window.location.href = 'https://www.youtube.com/watch?v=BNG8B5g6lGg';
+      });
+    </script>
+  </body>
+</html>

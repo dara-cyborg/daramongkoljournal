@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" class="bg-black text-zinc-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Offensive security portfolio in a terminal/CLI aesthetic." />
+    <title>Dara Mongkol Sandbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: ['"Cascadia Code"', '"Fira Code"', 'monospace']
+            },
+            boxShadow: {
+              terminal: '0 0 0 1px rgba(255,255,255,0.04)'
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      @media print {
+        @page { margin: 12mm; }
+        html, body { background: #fff !important; color: #111 !important; }
+        body { font-family: Arial, Helvetica, sans-serif !important; }
+        .no-print { display: none !important; }
+        a { color: #111 !important; text-decoration: none !important; }
+        .terminal-shell, .terminal-pane, nav, header { box-shadow: none !important; border-color: #ccc !important; background: #fff !important; }
+        .print-grid { display: block !important; }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-black font-mono text-zinc-300 antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,231 @@
+import { useEffect } from 'react';
+
+export default function Layout() {
+  const navItems = ['Home', 'Resume', 'Timelines', 'Latest Activity', 'Digital Certs', 'Writeups'];
+  const digitalCerts = [
+    { name: 'ITE', description: 'Cisco IT Essentials', file: 'ITEssentialsUpdate20260118-31-zafgmi.pdf' },
+    { name: 'CCNA ITN', description: 'Introduction to Networking', file: 'CCNAITNUpdated20260118-32-mxyrla.pdf' },
+    { name: 'CCNA SRWE', description: 'Switching, Routing, and Wireless Essentials', file: 'CCNASRWEUpdate20260118-31-88nmya.pdf' },
+    { name: 'CCNA ENSA', description: 'Enterprise Networking, Security, and Automation', file: 'CCNAENSAUpdate20260118-31-y9wi9h.pdf' },
+    { name: 'THM Certificate', description: 'Pre-Security: how technology works from the ground up', file: 'THM-9Z3AQY70RY.pdf' },
+    { name: 'CEHv13', description: 'Certified Ethical Hacker (CEHv13) — upcoming certification.', file: null, comingSoon: true },
+  ];
+
+  useEffect(() => {
+    const prompt = document.getElementById('hero-prompt');
+    const output = document.getElementById('hero-output');
+    const nextPrompt = document.getElementById('hero-next-prompt');
+    const nextPromptText = document.getElementById('hero-next-prompt-text');
+    const nextOutput = document.getElementById('hero-next-output');
+    const extraGoals = document.querySelectorAll('.goal-line');
+    if (!prompt || !output || !nextPrompt || !nextPromptText || !nextOutput || !extraGoals.length) return;
+
+    const commands = [
+      { text: 'whoami', output: 'CHEA CHANDARAMONGKOL' },
+      { text: 'ls -la goals', output: '-rwx------ to become a professional offensive security officer' },
+    ];
+
+    let step = 0;
+    let charIndex = 0;
+    let timeoutId;
+
+    const type = () => {
+      const command = commands[step].text;
+      if (charIndex < command.length) {
+        charIndex += 1;
+        prompt.textContent = command.slice(0, charIndex);
+        timeoutId = setTimeout(type, 80);
+        return;
+      }
+
+      if (step === 0) {
+        output.textContent = commands[0].output;
+        output.classList.remove('hidden');
+        output.classList.add('text-lg', 'sm:text-xl');
+        document.getElementById('hero-cursor')?.classList.add('hidden');
+        nextPrompt.classList.remove('hidden');
+        nextPromptText.textContent = '';
+        timeoutId = setTimeout(() => {
+          const next = commands[1].text;
+          let j = 0;
+          const typeNext = () => {
+            if (j < next.length) {
+              nextPromptText.textContent = next.slice(0, j + 1);
+              j += 1;
+              timeoutId = setTimeout(typeNext, 80);
+              return;
+            }
+            nextOutput.textContent = commands[1].output;
+            nextOutput.classList.remove('hidden');
+            extraGoals.forEach((line) => line.classList.remove('hidden'));
+          };
+          typeNext();
+        }, 900);
+        return;
+      }
+    };
+
+    prompt.textContent = '';
+    output.classList.add('hidden');
+    nextPrompt.classList.add('hidden');
+    nextOutput.classList.add('hidden');
+    extraGoals.forEach((line) => line.classList.add('hidden'));
+    timeoutId = setTimeout(type, 150);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-black text-zinc-300 selection:bg-emerald-900/40">
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-4 sm:px-6 lg:px-8">
+        <header className="no-print sticky top-0 z-20 border border-zinc-800 bg-black/95 backdrop-blur-none">
+          <nav className="flex items-center justify-between gap-3 border-b border-zinc-800 px-4 py-3 text-[11px] uppercase tracking-[0.25em] text-zinc-500">
+            <div className="flex items-center gap-2 text-emerald-500">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span>My Sandbox/Portfolio</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 text-zinc-300">
+              {navItems.map((item) => {
+                const href = item === 'Writeups'
+                  ? 'https://ctf-writeups.dara-crawler.xyz/'
+                  : item === 'Resume'
+                    ? '/certs/RESUME_V3.pdf'
+                    : `#${item.toLowerCase().replace(/\s+/g, '-')}`;
+
+                return (
+                  <a
+                    key={item}
+                    href={href}
+                    target={item === 'Writeups' || item === 'Resume' ? '_blank' : undefined}
+                    rel={item === 'Writeups' || item === 'Resume' ? 'noreferrer' : undefined}
+                    className={`border border-zinc-800 px-3 py-1.5 transition hover:border-emerald-500 hover:text-emerald-500 ${item === 'Resume' ? 'bg-emerald-500 text-black' : ''}`}
+                  >
+                    {item}
+                  </a>
+                );
+              })}
+            </div>
+          </nav>
+        </header>
+
+        <section className="terminal-shell mt-6 rounded-xl border border-zinc-800 bg-black shadow-terminal">
+          <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-950/80 px-4 py-3 no-print">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-red-500" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            </div>
+            <span className="text-[10px] uppercase tracking-[0.35em] text-zinc-500">dara.sec</span>
+          </div>
+
+          <article className="border-b border-zinc-800 p-5 text-sm text-zinc-300 sm:p-6 lg:p-8">
+            <div className="rounded-lg bg-zinc-950/90 p-6 font-mono text-base leading-7 text-zinc-200">
+              <p className="text-lg sm:text-xl">
+                <span className="font-semibold text-emerald-500">root@dara.sec</span>
+                <span className="font-semibold text-white">:~# </span>
+                <span id="hero-prompt" className="inline-block min-h-[1.4em] text-white" />
+                <span id="hero-cursor" className="typing-cursor text-emerald-500">█</span>
+              </p>
+              <p id="hero-output" className="mt-2 hidden text-lg text-zinc-300 sm:text-xl">CHEA CHANDARAMONGKOL</p>
+              <p id="hero-next-prompt" className="mt-3 hidden text-lg sm:text-xl">
+                <span className="font-semibold text-emerald-500">root@dara.sec</span>
+                <span className="font-semibold text-white">:~# </span>
+                <span id="hero-next-prompt-text" className="inline-block min-h-[1.4em] text-white" />
+                <span className="typing-cursor text-emerald-500">█</span>
+              </p>
+              <p id="hero-next-output" className="mt-2 hidden text-lg text-zinc-300 sm:text-xl">-rwx------ To become a professional offensive security officer</p>
+              <p className="goal-line mt-1 hidden text-lg text-zinc-300 sm:text-xl">-rwx------ To gain hand-on experience on web app security</p>
+              <p className="goal-line mt-1 hidden text-lg text-zinc-300 sm:text-xl">-rwx------ To protect old and new users with proper privacy standards</p>
+              <p className="goal-line mt-1 hidden text-lg text-zinc-300 sm:text-xl">-rwx------ To provide the best performance to the team</p>
+            </div>
+          </article>
+
+          <section id="current-position" className="border-t border-zinc-800 p-4 sm:p-6 lg:p-8">
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-500">current position</p>
+            <div className="mt-4 space-y-6 text-zinc-300">
+              <article className="border border-zinc-800 bg-zinc-950/90 p-5">
+                <p className="text-lg font-semibold text-emerald-500">DELUX&apos;s Founder</p>
+                <p className="mt-2 text-sm text-zinc-400">An on-demand tool to solve the long existing problem of online sellers enabling them to generate more sales by mitigating the repetitive tasks during their live streams.</p>
+                <a className="mt-3 inline-flex text-sm text-amber-500 hover:text-amber-400" href="https://features.dara-crawler.xyz/" target="_blank" rel="noreferrer">https://features.dara-crawler.xyz/</a>
+              </article>
+
+              <article className="border border-zinc-800 bg-zinc-950/90 p-5">
+                <p className="text-lg font-semibold text-emerald-500">Technical Support Engineer, WiseStep</p>
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-300">
+                  <li>Serve as the first/second line of defense for incoming technical queries via email, phone, chat.</li>
+                  <li>Diagnose, troubleshoot, and resolve software faults (application requirements, crashes, freezes, network connectivity) and customer&apos;s hardware issues.</li>
+                  <li>Set up, configure applications for new customers.</li>
+                  <li>Install, update, and configure licensed software, operating systems (Windows, macOS, Linux), and security tools.</li>
+                  <li>Worked continuously on tasks until resolved with proper lesson-learned documentation.</li>
+                  <li>Researched, tested new softwares, frameworks, devices for product improvement.</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+
+          <section id="labs" className="grid gap-4 border-t border-zinc-800 p-4 sm:p-6 lg:grid-cols-2 lg:p-8">
+            {[
+              ['Recon', 'Target mapping, scope validation, and clean notes.'],
+              ['Exploitation', 'Validated chains, risk framing, and mitigation paths.'],
+              ['Detection', 'Telemetry, signal quality, and response-ready context.'],
+              ['Reporting', 'Executive summaries and technical detail in one path.'],
+            ].map(([title, body]) => (
+              <article key={title} className="border border-zinc-800 bg-black p-4 text-zinc-300">
+                <p className="text-xs uppercase tracking-[0.25em] text-emerald-500">{title}</p>
+                <p className="mt-2 text-sm text-zinc-400">{body}</p>
+              </article>
+            ))}
+          </section>
+
+          <section id="timeline" className="border-t border-zinc-800 p-4 sm:p-6 lg:p-8">
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-500">timeline</p>
+            <div className="mt-4 space-y-4 text-sm text-zinc-300">
+              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2026</span> — Certified Ethical Hacker (CEHv13) ongoing.</div>
+              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2025</span> — 9/100 on KOH KER OSINT CTF.</div>
+              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2025</span> — 4/6 on UYFC's Empowering Tomorrow's Entrepreneurs.</div>
+              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2024</span> — RUPP - Bachelor's degree in CS ongoing.</div>
+              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2023</span> — Beltei IS - High School Diploma.</div>
+            </div>
+          </section>
+
+          <section id="digital-certs" className="border-t border-zinc-800 p-4 sm:p-6 lg:p-8">
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-500">digital certs</p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {digitalCerts.map((cert) => (
+                <article key={cert.name} className="border border-zinc-800 bg-zinc-950/90 p-4 text-zinc-300">
+                  <p className="text-sm uppercase tracking-[0.2em] text-emerald-500">{cert.name}</p>
+                  <p className="mt-1 text-sm text-zinc-400">{cert.description}</p>
+                  {cert.comingSoon ? (
+                    <button
+                      type="button"
+                      className="mt-4 inline-flex cursor-not-allowed items-center rounded border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm font-medium text-zinc-500"
+                      disabled
+                    >
+                      Coming Soon...
+                    </button>
+                  ) : (
+                    <a
+                      href={`/certs/${cert.file}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 inline-flex items-center rounded border border-emerald-500/60 bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-400 transition hover:border-emerald-400 hover:bg-emerald-500/20"
+                    >
+                      Open certificate
+                    </a>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <footer id="contact" className="border-t border-zinc-800 p-4 text-sm text-zinc-400 sm:p-6 lg:p-8">
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-500">contact</p>
+            <p className="mt-3">Email: <a className="text-emerald-500 hover:text-emerald-400" href="mailto:daramongkol.chan@gmail.com">daramongkol.chan@gmail.com</a></p>
+            <p>GitHub: <a className="text-amber-500 hover:text-amber-400" href="https://github.com/dara-cyborg" target="_blank" rel="noreferrer">github.com/dara-cyborg</a></p>
+            <p>Writeups: <a className="text-emerald-500 hover:text-emerald-400" href="https://ctf-writeups.dara-crawler.xyz/" target="_blank" rel="noreferrer">ctf-writeups.dara-crawler.xyz</a></p>
+          </footer>
+        </section>
+      </div>
+    </main>
+  );
+}

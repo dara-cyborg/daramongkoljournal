@@ -1,0 +1,19 @@
+:root {
+  color: #e4e4e7;
+  background-color: #000;
+  font-family: "Cascadia Code", "Fira Code", monospace;
+}
+
+html { scroll-behavior: smooth; }
+body { margin: 0; min-height: 100vh; background: #000; }
+
+::selection { background: rgba(52, 211, 153, 0.2); color: #f4f4f5; }
+
+@keyframes blink-cursor {
+  0%, 45% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+
+.typing-cursor {
+  animation: blink-cursor 1s step-end infinite;
+}
