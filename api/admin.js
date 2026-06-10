@@ -31,6 +31,8 @@ export default function handler(req, res) {
       h1 { margin: 8px 0 0; font-size: 22px; color: #ecfccb; }
       p { color: #d4d4d8; line-height: 1.45; }
       code { color: #86efac; font-family: ui-monospace, SFMono-Regular, monospace; }
+      .video-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; border: 1px solid #27272a; background: #000; }
+      .video-wrap iframe { width: 100%; height: 100%; border: 0; }
     </style>
   </head>
   <body>
@@ -38,10 +40,21 @@ export default function handler(req, res) {
       <section class="panel">
         <p class="label">admin endpoint</p>
         <h1>Administrator Access</h1>
-        <p style="margin-top: 10px;">This page is now protected by real server-side Basic Auth, which is compatible with Vercel free hosting.</p>
-        <p style="margin-top: 8px;">Credentials: <code>admin / admin</code> unless you override <code>ADMIN_USER</code> and <code>ADMIN_PASS</code> in Vercel.</p>
+        <p style="margin-top: 10px;">Administrator access is live.</p>
+        <div class="video-wrap" style="margin-top: 16px;">
+          <video id="adminVideo" src="/media/admin-video.mp4" controls playsinline loop preload="auto" style="width: 100%; height: 100%; background: #000;"></video>
+        </div>
       </section>
     </main>
+    <script>
+      const video = document.getElementById('adminVideo');
+      if (video) {
+        video.volume = 1;
+        video.muted = false;
+        video.loop = true;
+        video.play().catch(() => {});
+      }
+    </script>
   </body>
 </html>`);
     return;
