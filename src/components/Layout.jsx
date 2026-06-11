@@ -2,6 +2,16 @@ import { useEffect } from 'react';
 
 export default function Layout() {
   const navItems = ['Home', 'Resume', 'Timelines', 'Latest Activity', 'Digital Certs', 'Writeups'];
+  const timelineEntries = [
+    { year: '2024', title: 'The Beginning', body: 'Graduated as an average student ranked in D. Holding regrets not getting the expected result. Enrolled into RUPP as a CS student. Overclocked the knowledge limitation then discovered "Cybersecurity".', tag: 'FOUNDATION' },
+    { year: 'June 2024', title: 'Breaking the Ground', body: 'Enrolled into CCNA to build the networking foundation and strengthen real-world skills in routing, switching, and secure infrastructure.', tag: 'NETWORKING' },
+    { year: 'October 2024', title: 'UYFC Competition', body: 'Without any prior experience, joined a competition hosted by UYFC on topic - "Empowering Young Entrepreneurs"', tag: 'ENTREPRENEURSHIP' },
+    { year: 'January 2025', title: 'Practical CCNA', body: 'Formed a study group within the class helping classmates on the basic principles of TCP/IP Model, IPv4, Subnetting, VLANs.', tag: 'PRACTICAL' },
+    { year: 'May 2025', title: '4th Runner Up - UYFC', body: 'Didn\'t do a handy job, but did what could be done. Plus, gaining experience and meeting new talented people.', tag: 'LESSON' },
+    { year: 'November 2025', title: 'Top 10 - KOHKER OSINT CTF Competition', body: 'Passed round 1 against 100 competitors, and got 9th place in round 2 on OSINT topic. Learned how to maintain the momentum, be calm, graph out clue from pieces to build one giant piece of information.', tag: 'OSINT' },
+    { year: 'December 2025', title: 'Building the Skill', body: 'Enrolled into Certified Ethical Hacker (CEHv13) class to build not only practical skills, but theories to form a complete ethical understanding of the hacking world.', tag: 'CEHv13' },
+    { year: 'February 2026', title: 'Ego - DELUX', body: 'Built a digital tool solving online sellers\' long existing problem of doing the repetitve tasks during their live streams. Generating them more sales during lives.', tag: 'DELUX' },
+  ];
   const digitalCerts = [
     { name: 'ITE', description: 'Cisco IT Essentials', file: 'ITEssentialsUpdate20260118-31-zafgmi.pdf' },
     { name: 'CCNA ITN', description: 'Introduction to Networking', file: 'CCNAITNUpdated20260118-32-mxyrla.pdf' },
@@ -73,6 +83,26 @@ export default function Layout() {
     timeoutId = setTimeout(type, 150);
 
     return () => clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    const cards = document.querySelectorAll('.timeline-card');
+    if (!cards.length) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-x-0');
+            entry.target.classList.remove('opacity-0', 'translate-x-6', '-translate-x-6');
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -163,28 +193,29 @@ export default function Layout() {
             </div>
           </section>
 
-          <section id="labs" className="grid gap-4 border-t border-zinc-800 p-4 sm:p-6 lg:grid-cols-2 lg:p-8">
-            {[
-              ['Recon', 'Target mapping, scope validation, and clean notes.'],
-              ['Exploitation', 'Validated chains, risk framing, and mitigation paths.'],
-              ['Detection', 'Telemetry, signal quality, and response-ready context.'],
-              ['Reporting', 'Executive summaries and technical detail in one path.'],
-            ].map(([title, body]) => (
-              <article key={title} className="border border-zinc-800 bg-black p-4 text-zinc-300">
-                <p className="text-xs uppercase tracking-[0.25em] text-emerald-500">{title}</p>
-                <p className="mt-2 text-sm text-zinc-400">{body}</p>
-              </article>
-            ))}
-          </section>
-
-          <section id="timeline" className="border-t border-zinc-800 p-4 sm:p-6 lg:p-8">
+          <section id="timeline" className="border-t border-zinc-800 bg-black p-4 sm:p-6 lg:p-8">
             <p className="text-xs uppercase tracking-[0.25em] text-zinc-500">timeline</p>
-            <div className="mt-4 space-y-4 text-sm text-zinc-300">
-              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2026</span> — Certified Ethical Hacker (CEHv13) ongoing.</div>
-              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2025</span> — 9/100 on KOH KER OSINT CTF.</div>
-              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2025</span> — 4/6 on UYFC's Empowering Tomorrow's Entrepreneurs.</div>
-              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2024</span> — RUPP - Bachelor's degree in CS ongoing.</div>
-              <div className="border border-zinc-800 p-4"><span className="text-emerald-500">2023</span> — Beltei IS - High School Diploma.</div>
+            <div className="relative mt-8 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/70 p-4 sm:p-6 lg:p-8">
+              <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-zinc-800 md:block" />
+              <div className="space-y-14 md:space-y-16">
+                {timelineEntries.map((entry, index) => {
+                  const isEven = index % 2 === 0;
+                  return (
+                    <article
+                      key={entry.year}
+                      className={`timeline-card relative flex items-center opacity-0 transition-all duration-700 ease-out md:min-h-[180px] ${isEven ? 'md:justify-start' : 'md:justify-end'} ${index % 2 === 0 ? 'translate-x-6' : '-translate-x-6'}`}
+                    >
+                      <div className="w-full rounded-xl border border-zinc-800 bg-black p-4 shadow-[0_10px_30px_rgba(0,0,0,0.35)] md:w-[45%] md:p-5">
+                        <p className="text-[10px] uppercase tracking-[0.35em] text-emerald-500">{entry.year}</p>
+                        <h3 className="mt-2 text-base font-semibold text-zinc-100">{entry.title}</h3>
+                        <p className="mt-3 text-xs leading-6 text-zinc-400">{entry.body}</p>
+                        <span className="mt-4 inline-flex rounded-full bg-emerald-500/10 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-emerald-400">{entry.tag}</span>
+                      </div>
+                      <span className="absolute left-1/2 top-1/2 hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500 shadow-[0_0_0_6px_rgba(52,211,153,0.12)] md:block" />
+                    </article>
+                  );
+                })}
+              </div>
             </div>
           </section>
 
